@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CapFlex - Inscription & Connexion</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #3b2e2e; /* Couleur chocolat */
+            color: #ffffff;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #5c3e3e; /* Couleur chocolat plus clair */
+            border-radius: 10px;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: none;
+            box-sizing: border-box;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #d2691e; /* Couleur bouton chocolat */
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .toggle-button {
+            margin-top: 20px;
+            cursor: pointer;
+            text-decoration: underline;
+            color: #d2691e;
+        }
+
+        .client-service {
+            margin-top: 20px;
+            display: block;
+            color: #d2691e;
+            text-decoration: none;
+        }
+
+        .error {
+            color: red;
+            font-size: 0.9em;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Bienvenue sur Capflex</h2>
+        
+        <!-- Formulaire d'inscription -->
+        <form id="registrationForm">
+            <h3>Inscription</h3>
+            <div class="error" id="registrationError"></div>
+            <div>
+                <select id="countryCode" required>
+                    <option value="">Sélectionner le code du pays</option>
+                    <option value="+225">Côte d'Ivoire (+225)</option>
+                    <option value="+221">Sénégal (+221)</option>
+                    <option value="+223">Mali (+223)</option>
+                    <option value="+226">Burkina Faso (+226)</option>
+                    <option value="+228">Togo (+228)</option>
+                </select>
+                <input type="text" id="phoneNumber" placeholder="Numéro de téléphone" required>
+            </div>
+            <input type="password" id="password" placeholder="Mode de passe" required>
+            <input type="password" id="confirmPassword" placeholder="Confirmer le mode de passe" required>
+            <input type="text" id="referralCode" placeholder="Code de parrainage" value="9OBQ0SCR" required>
+            <button type="submit">Inscription</button>
+        </form>
+
+        <!-- Formulaire de connexion -->
+        <form id="loginForm" style="display: none;">
+            <h3>Connexion</h3>
+            <div class="error" id="loginError"></div>
+            <div>
+                <select id="countryCodeLogin" required>
+                    <option value="">Sélectionner le code du pays</option>
+                    <option value="+225">Côte d'Ivoire (+225)</option>
+                    <option value="+221">Sénégal (+221)</option>
+                    <option value="+223">Mali (+223)</option>
+                    <option value="+226">Burkina Faso (+226)</option>
+                    <option value="+228">Togo (+228)</option>
+                </select>
+                <input type="text" id="phoneNumberLogin" placeholder="Numéro de téléphone" required>
+            </div>
+            <input type="password" id="passwordLogin" placeholder="Mode de passe" required>
+            <button type="submit">Connexion</button>
+        </form>
+
+        <!-- Bouton pour basculer entre les formulaires -->
+        <div class="toggle-button" id="toggleForm">Basculer vers Connexion</div>
+
+        <!-- Lien vers le service client -->
+        <a href="https://t.me/Capflex9" class="client-service">Service client 👩‍⚕️</a>
+    </div>
+
+    <script>
+        const registrationForm = document.getElementById('registrationForm');
+        const loginForm = document.getElementById('loginForm');
+        const toggleForm = document.getElementById('toggleForm');
+        const registrationError = document.getElementById('registrationError');
+        const loginError = document.getElementById('loginError');
+
+        toggleForm.addEventListener('click', () => {
+            if (registrationForm.style.display === 'none') {
+                registrationForm.style.display = 'block';
+                loginForm.style.display = 'none';
+                toggleForm.textContent = 'Basculer vers Connexion';
+            } else {
+                registrationForm.style.display = 'none';
+                loginForm.style.display = 'block';
+                toggleForm.textContent = 'Basculer vers Inscription';
+            }
+            registrationError.textContent = ''; // Réinitialiser le message d'erreur
+            loginError.textContent = ''; // Réinitialiser le message d'erreur
+        });
+
+        registrationForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const countryCode = document.getElementById('countryCode').value;
+            const phoneNumber = document.getElementById('phoneNumber').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const referralCode = document.getElementById('referralCode').value;
+
+            if (password !== confirmPassword) {
+                registrationError.textContent = "Les mots de passe ne correspondent pas !";
+                return;
+            }
+
+            if (!countryCode || !phoneNumber) {
+                registrationError.textContent = "Veuillez remplir tous les champs !";
+                return;
+            }
+
+            // Enregistre les informations dans le localStorage
+            localStorage.setItem('registeredCountryCode', countryCode);
+            localStorage.setItem('registeredPhoneNumber', phoneNumber);
+            localStorage.setItem('registeredPassword', password);
+            localStorage.setItem('registeredReferralCode', referralCode);
+
+            // Cache le formulaire d'inscription et montre le formulaire de connexion
+            registrationForm.style.display = 'none';
+            loginForm.style.display = 'block';
+            toggleForm.textContent = 'Basculer vers Inscription';
+            registrationError.textContent = ''; // Réinitialiser le message d'erreur
+        });
+
+        loginForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const countryCodeLogin = document.getElementById('countryCodeLogin').value;
+            const phoneNumberLogin = document.getElementById('phoneNumberLogin').value;
+            const passwordLogin = document.getElementById('passwordLogin').value;
+
+            const storedCountryCode = localStorage.getItem('registeredCountryCode');
+            const storedPhoneNumber = localStorage.getItem('registeredPhoneNumber');
+            const storedPassword = localStorage.getItem('registeredPassword');
+
+            if (countryCodeLogin !== storedCountryCode || phoneNumberLogin !== storedPhoneNumber || passwordLogin !== storedPassword) {
+                loginError.textContent = "Numéro de téléphone ou mot de passe incorrect !";
+                return;
+            }
+
+            // Redirection après connexion réussie
+            window.location.href = "https://caflexcaflex.github.io/CaFlex-/index.html";
+        });
+
+        // Génère automatiquement un code de parrainage si le lien contient un paramètre 'referral'
+        const urlParams = new URLSearchParams(window.location.search);
+        const referralCode = urlParams.get('referral');
+        if (referralCode) {
+            document.getElementById('referralCode').value = referralCode;
+        }
+    </script>
+</body>
+</html>
